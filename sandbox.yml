@@ -1,0 +1,53 @@
+name: energy-infrastructure
+
+provider: OpenStack
+
+hosts:
+  - name: concentrator
+    base_box: 
+      image: ubuntu-focal-x86_64
+      man_user: ubuntu
+    flavor: standard.small
+
+  - name: smart-meter
+    base_box: 
+      image: ubuntu-focal-x86_64
+      man_user: ubuntu
+    flavor: standard.small
+
+routers:
+  - name: router
+    cidr: 100.100.100.0/29
+    base_box:
+      image: debian-9-x86_64
+      man_user: debian
+    flavor: standard.small
+
+networks:
+  - name: concentrator-switch
+    cidr: 192.168.20.0/24
+
+  - name: smart-meter-switch
+    cidr: 192.168.30.0/24
+
+net_mappings:
+    - host: concentrator
+      network: concentrator-switch
+      ip: 192.168.20.5
+    - host: smart-meter
+      network: smart-meter-switch
+      ip: 192.168.30.5
+
+router_mappings:
+    - router: router
+      network: concentrator-switch
+      ip: 192.168.20.1
+    - router: router
+      network: smart-meter-switch
+      ip: 192.168.30.1
+
+groups:
+  - name: user-accessible
+    nodes:
+      - smart-meter
+      - concentrator

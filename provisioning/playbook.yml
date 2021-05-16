@@ -1,0 +1,35 @@
+---
+
+- name: disable qxl
+  hosts:
+      - routers
+      - hosts
+  gather_facts: yes
+  become: yes
+  become_user: root
+
+- name: user access
+  hosts:
+      - user-accessible
+  gather_facts: no
+  become: yes
+  become_user: root
+
+- name: Setting up Telnet for smart-meter and concentrator
+  hosts:
+    - concentrator
+    - smart-meter
+  become: yes
+  tasks:
+      - name: Test network connection using apt
+        apt:
+          update_cache: yes
+        register: apt_update
+        ignore_errors: yes
+
+      - name: Restart if broken network
+        reboot:
+        when: apt_update is failed
+
+      - include_role:
+            name: "{{ inventory_hostname }}"
