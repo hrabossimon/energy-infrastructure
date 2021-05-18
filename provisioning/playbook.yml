@@ -1,5 +1,40 @@
 ---
-- name: Setting up Telnet for smart-meter and concentrator
+
+- name: disable qxl
+  hosts:
+      - routers
+      - hosts
+  gather_facts: yes
+  become: yes
+  become_user: root
+
+  tasks:
+      - include_role:
+            name: kypo-disable-qxl
+        when: ansible_os_family == 'Debian'
+
+- name: user access
+  hosts:
+      - user-accessible
+  gather_facts: no
+  become: yes
+  become_user: root
+
+  tasks:
+      - include_role:
+            name: kypo-user-access
+        vars:
+            kypo_user_access_username: '{{ user }}'
+            kypo_user_access_password: 'kypo'
+        with_items:
+            - kypo
+            - root
+        loop_control:
+            loop_var: user
+
+
+
+- name: Install dependencies
   hosts:
     - concentrator
     - smart-meter
@@ -11,9 +46,12 @@
         register: apt_update
         ignore_errors: yes
 
+      - name: Install packages
+        apt:
+          pkg:
+           - maven
+
       - name: Restart if broken network
         reboot:
         when: apt_update is failed
 
-      - include_role:
-            name: "{{ inventory_hostname }}"

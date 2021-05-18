@@ -1,0 +1,6 @@
+[submodule "provisioning/roles/kypo-disable-qxl"]
+	path = provisioning/roles/kypo-disable-qxl
+	url = https://gitlab.ics.muni.cz/muni-kypo-crp/useful-ansible-roles/kypo-disable-qxl
+[submodule "provisioning/roles/kypo-user-access"]
+	path = provisioning/roles/kypo-user-access
+	url = https://gitlab.ics.muni.cz/muni-kypo-crp/backend-python/ansible-networking-stage/kypo-user-access
