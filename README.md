@@ -10,8 +10,14 @@ vagrant plugin install --plugin-version ">= 0.0.31" vagrant-libvirt
 vagrant plugin install vagrant-hostmanager
 vagrant plugin install vagrant-vbguest
 ```
-Go to directory containing your Vagrantfile and run.
+Clone repositories.
 ```sh
+git clone https://github.com/openstack/kolla
+git clone https://github.com/openstack/kolla-ansible
+```
+Go to directory containing Vagrantfile and run.
+```sh
+cd kolla-ansible/contrib/dev/vagrant/ 
 vagrant up
 vagrant ssh operator
 ```
